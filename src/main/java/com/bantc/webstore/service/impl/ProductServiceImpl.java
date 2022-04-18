@@ -1,6 +1,7 @@
 package com.bantc.webstore.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bantc.webstore.domain.Product;
 import com.bantc.webstore.domain.repository.ProductRepository;
@@ -29,5 +30,14 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProducts() {
         return productRepository.getAllProducts();
     }
-    
+
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.getProductByCategory(category);
+    }
+
+    @Override
+    public List<Product> getProductByFilter(Map<String, List<String>> filterParams) {
+        return productRepository.getProductsByFilter(filterParams);
+    }
 }

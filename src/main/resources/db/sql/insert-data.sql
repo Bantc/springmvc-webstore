@@ -36,3 +36,21 @@ INSERT INTO PRODUCTS VALUES (
     0,
     false
 );
+
+INSERT INTO CUSTOMERS VALUES (
+    'C0001',
+    'John Cena',
+    'Kulka str.',
+    97,
+    'USA',
+    0
+);
+
+INSERT INTO CUSTOMERS VALUES (
+    'C0002',
+    'Rick Wick',
+    'Gruszkowa',
+    15,
+    'Poland',
+    0
+);
