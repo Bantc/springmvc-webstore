@@ -51,12 +51,12 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public String getManufactutrer() {
+    public String getManufacturer() {
         return this.manufacturer;
     }
 
-    public void setManufacturer(String manufactutrer) {
-        this.manufacturer = manufactutrer;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getCategory() {

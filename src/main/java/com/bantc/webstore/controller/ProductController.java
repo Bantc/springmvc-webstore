@@ -14,12 +14,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("market")
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @RequestMapping("/product")
+    public String getProductById(@RequestParam("id") String productId, Model model) {
+        model.addAttribute("product", productService.getProductById(productId));
+
+        return "product";
+    }
     
     @RequestMapping("/products")
     public String list(Model model) {
