@@ -3,6 +3,8 @@ package com.bantc.webstore.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Product implements Serializable {
     private static final long serialVersionUID = 13L;
 
@@ -16,6 +18,7 @@ public class Product implements Serializable {
     private long unitsInOrder;
     private BigDecimal unitPrice;
     private boolean discontinued;
+    private MultipartFile productImage;
 
     public Product() {
         super();
@@ -109,6 +112,14 @@ public class Product implements Serializable {
 
     public void setDiscontinued(boolean discontinued) {
         this.discontinued = discontinued;
+    }
+
+    public MultipartFile getProductImage() {
+        return this.productImage;
+    }
+
+    public void setProductImage(MultipartFile productImage) {
+        this.productImage = productImage;
     }
 
     @Override

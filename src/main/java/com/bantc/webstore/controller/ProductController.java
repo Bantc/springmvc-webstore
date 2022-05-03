@@ -1,7 +1,11 @@
 package com.bantc.webstore.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.bantc.webstore.domain.Product;
 import com.bantc.webstore.service.ProductService;
@@ -19,10 +23,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("market")
 public class ProductController {
+    private static final Logger LOGGER = Logger.getLogger(ProductController.class.getName() );
     @Autowired
     private ProductService productService;
 
@@ -30,7 +36,8 @@ public class ProductController {
     public void initialiseBinder(WebDataBinder binder) {
         binder.setAllowedFields("productId", "name", 
         "description", "manufacturer", "category",
-        "condition", "unitsInStock", "unitPrice");
+        "condition", "unitsInStock", "unitPrice",
+        "productImage");
     }
 
     @RequestMapping("/product")
@@ -77,7 +84,8 @@ public class ProductController {
     }
 
     @RequestMapping(value = "products/add", method = RequestMethod.POST)
-    public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result) {
+    public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result,
+                                           HttpServletRequest request) {
         String[] suppressedFields = result.getSuppressedFields();
 
         if (suppressedFields.length > 0) {
@@ -85,6 +93,17 @@ public class ProductController {
                 StringUtils.arrayToCommaDelimitedString(suppressedFields));
         }
 
+        MultipartFile productImage = productToBeAdded.getProductImage();
+        String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+        LOGGER.info("rootDirectory:" + rootDirectory);
+
+        if (productImage != null && !productImage.isEmpty()) {
+            try {
+                productImage.transferTo(new File(rootDirectory + "resources\\images\\" + productToBeAdded.getProductId() + ".png"));
+            } catch (Exception e) {
+                throw new RuntimeException("Product Image saving failed", e);
+            }
+        }
         productService.addProduct(productToBeAdded);
 
         return "redirect:/market/products";
