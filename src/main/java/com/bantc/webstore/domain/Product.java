@@ -2,9 +2,14 @@ package com.bantc.webstore.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.web.multipart.MultipartFile;
 
+@XmlRootElement
 public class Product implements Serializable {
     private static final long serialVersionUID = 13L;
 
@@ -18,6 +23,7 @@ public class Product implements Serializable {
     private long unitsInOrder;
     private BigDecimal unitPrice;
     private boolean discontinued;
+    @JsonIgnore
     private MultipartFile productImage;
 
     public Product() {
@@ -114,6 +120,7 @@ public class Product implements Serializable {
         this.discontinued = discontinued;
     }
 
+    @XmlTransient
     public MultipartFile getProductImage() {
         return this.productImage;
     }

@@ -8,8 +8,10 @@ import java.util.Map;
 
 import com.bantc.webstore.domain.Product;
 import com.bantc.webstore.domain.repository.ProductRepository;
+import com.bantc.webstore.exception.ProductNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +27,11 @@ public class InMemoryProductRepository implements ProductRepository {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", productId);
 
-        return jdbcTemplate.queryForObject(SQL, params, new ProductMapper());
+        try {
+            return jdbcTemplate.queryForObject(SQL, params, new ProductMapper());
+        } catch (DataAccessException exception) {
+            throw new ProductNotFoundException(productId);
+        }
     }
 
     @Override
