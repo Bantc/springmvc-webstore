@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.bantc.webstore.domain.Product;
 import com.bantc.webstore.exception.NoProductsFoundUnderCategoryException;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+// import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("market")
@@ -93,8 +96,11 @@ public class ProductController {
     }
 
     @RequestMapping(value = "products/add", method = RequestMethod.POST)
-    public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result,
+    public String processAddNewProductForm(@ModelAttribute("newProduct") @Valid Product productToBeAdded, BindingResult result,
                                            HttpServletRequest request) {
+        if(result.hasErrors()) {
+            return "addProduct";
+        }
         String[] suppressedFields = result.getSuppressedFields();
 
         if (suppressedFields.length > 0) {
@@ -116,6 +122,12 @@ public class ProductController {
         productService.addProduct(productToBeAdded);
 
         return "redirect:/market/products";
+    }
+
+    @RequestMapping("/products/invalidPromoCode")
+    public String invalidPromoCode() {
+        
+        return "invalidPromoCode";
     }
 
     @ExceptionHandler(ProductNotFoundException.class)

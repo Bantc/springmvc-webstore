@@ -2,25 +2,42 @@ package com.bantc.webstore.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.bantc.webstore.validator.ProductId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.web.multipart.MultipartFile;
+
+// import jakarta.validation.constraints.Digits;
+// import jakarta.validation.constraints.Min;
+// import jakarta.validation.constraints.NotNull;
+// import jakarta.validation.constraints.Pattern;
+// import jakarta.validation.constraints.Size;
 
 @XmlRootElement
 public class Product implements Serializable {
     private static final long serialVersionUID = 13L;
 
+    @Pattern(regexp="P[1-9]+", message="{Pattern.Product.productId.validation}")
+    @ProductId
     private String productId;
+    @Size(min=4, max=50, message="{Size.Product.name.validation}")
     private String name;
     private String description;
     private String manufacturer;
+    @NotEmpty(message = "{NotEmpty.Product.category.validation}")
     private String category;
     private String condition;
+    @Min(value=0, message="{Min.Product.unitsInStock.validation}")
     private long unitsInStock;
     private long unitsInOrder;
+    @Min(value=0, message="{Min.Product.unitPrice.validation}")
+    @Digits(integer=8, fraction=2, message="{Digits.Product.unitPrice.validation}")
+    @NotNull(message= "{NotNull.Product.unitPrice.validation}")
     private BigDecimal unitPrice;
     private boolean discontinued;
     @JsonIgnore
